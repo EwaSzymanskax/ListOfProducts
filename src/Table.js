@@ -1,26 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Pagination } from 'react-pagination-bar';
 import './Table.css';
 import 'react-pagination-bar/dist/index.css';
+import Modal from 'react-modal';
 // import Filter from './Filter';
 
-const Table = () => {
+const Table = ({filterValue}) => {
 
-const [product, setProduct] = useState("");
+const [product, setProduct] = useState([]);
+const [filterProducts, setFilterProducts] = useState(-1)
 const [currentPage, setCurrentPage] = useState(1);
-const pagePostsLimit = 5;
+const [modalIsOpen, setIsOpen] = useState(false);
+const [currentProduct, setCurrentProduct] = useState('') 
+const pagePostsLimit = 6;
 
-const getProduct = () => { Axios.get("https://reqres.in/api/products").then((response) => { 
-setProduct(response.data.data)
+useEffect(() => { 
+    const getProduct = () => { Axios.get(`https://reqres.in/api/products?page=${currentPage}`).then((response) => { 
+    setProduct(response.data.data)
+    console.log(response)
+    
+    })}
 
-})}
+    getProduct()
+  },[currentPage]);
+
+
+  useEffect(() => { 
+    const filterNum = Number(filterValue);
+    if (filterNum) { 
+  const filterProducts = product.filter((prod)=>prod.id === filterNum);
+  setFilterProducts(filterProducts);}
+    else { setFilterProducts(-1)}
+
+  },[filterValue]);
+
+const openModal = (id) => {
+    setIsOpen(true);
+    const testProduct = product.find(el=> el.id=id);
+    setCurrentProduct(testProduct)
+    console.log(testProduct)
+    console.log(id)
+}
+const afterOpenModal=() =>{
+    
+
+};
+
+const closeModal = () =>{
+    setIsOpen(false)
+}
 console.log(currentPage)
-  
+console.log(product)
+
+const visibleProducts = filterProducts !== -1 ? filterProducts : product
+
+
 return (
 <div className="app-container">
-    <div > 
-        <table onClick={getProduct}>
+    <div>
+        <table>
             <thead>
                 <tr>
                 <th>Id</th>
@@ -29,30 +68,36 @@ return (
                 </tr>
             </thead>
             <tbody>
-            {product.length > 0 
-            && product.slice
-                ((currentPage - 1) * pagePostsLimit, currentPage * pagePostsLimit)
+            {visibleProducts.length > 0 && visibleProducts
+            // && visibleProducts.slice
+            //     ((currentPage - 1) * pagePostsLimit, currentPage * pagePostsLimit)
             .map((d, i)=>{
-            return <tr  key={i}>
+            return <tr key={i} onClick={()=>openModal(d.id)} >
                 <td style={{backgroundColor: d.color}}>{d.id}</td>
                 <td style={{backgroundColor: d.color}}>{d.name}</td>
                 <td style={{backgroundColor: d.color}}>{d.year}</td>
                 </tr>
            
              })}
-             <Pagination 
+             
+            </tbody>
+        </table>
+        <Pagination 
              currentPage={currentPage}
              itemsPerPage={pagePostsLimit}
              onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-             totalItems={product.length}
+             totalItems={12}
              pageNeighbours={2}
             />
-            </tbody>
-        </table>
-        
-        
-
-        
+            <Modal
+            // details={product.find()}
+            isOpen={modalIsOpen}
+            ariaHideApp={false}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        // style={customStyles}
+        contentLabel="Example Modal"
+      ><p>{currentProduct.name}</p></Modal>
     </div>
 </div>
 )
