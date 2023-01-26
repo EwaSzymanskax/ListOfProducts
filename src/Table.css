@@ -3,14 +3,15 @@
     flex-direction: column;
     gap: 10px;
     padding: 1rem;
+
   }
 
   
   table {
     border-collapse: collapse;
     width: 100%;
-    z-index: -1;
-
+    margin-bottom: 20px;
+   
   }
   
   th,
@@ -19,7 +20,7 @@
     text-align: left;
     padding: 8px;
     font-size: 32px;
-    z-index: -1;
+      border-radius: 4px;
   }
   
   th {
@@ -39,5 +40,26 @@
     display: flex;
     justify-content: space-evenly;
   }
+
+  button {
+    height:20px;
+    width:20px;
+    border-top:1px solid #000;
+    position:absolute;
+    top:1px;
+    right: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+
+  }
+
+nav.rpb-root{
+    display: flex;
+}
   
  

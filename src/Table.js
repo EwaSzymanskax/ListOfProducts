@@ -6,6 +6,7 @@ import 'react-pagination-bar/dist/index.css';
 import Modal from 'react-modal';
 // import Filter from './Filter';
 
+
 const Table = ({filterValue}) => {
 
 const [product, setProduct] = useState([]);
@@ -16,10 +17,14 @@ const [currentProduct, setCurrentProduct] = useState('')
 const pagePostsLimit = 6;
 
 useEffect(() => { 
-    const getProduct = () => { Axios.get(`https://reqres.in/api/products?page=${currentPage}`).then((response) => { 
+    const getProduct = () => { Axios.get (`https://reqres.in/api/products?page=${currentPage}`).then((response) => { 
     setProduct(response.data.data)
-    console.log(response)
+    console.log(response.data.data)
     
+    })
+    .catch((error) => {
+        console.log("error", error.message);
+        alert('an error has occurred!')
     })}
 
     getProduct()
@@ -37,23 +42,25 @@ useEffect(() => {
 
 const openModal = (id) => {
     setIsOpen(true);
-    const testProduct = product.find(el=> el.id=id);
+    const testProduct = product.find((el) => el.id === id);
     setCurrentProduct(testProduct)
     console.log(testProduct)
-    console.log(id)
+    console.log(product)
 }
-const afterOpenModal=() =>{
+// const afterOpenModal=() =>{
     
 
-};
+// };
 
 const closeModal = () =>{
-    setIsOpen(false)
+    setIsOpen(false);
 }
+
 console.log(currentPage)
-console.log(product)
+// console.log(currentProduct)
 
 const visibleProducts = filterProducts !== -1 ? filterProducts : product
+
 
 
 return (
@@ -72,7 +79,7 @@ return (
             // && visibleProducts.slice
             //     ((currentPage - 1) * pagePostsLimit, currentPage * pagePostsLimit)
             .map((d, i)=>{
-            return <tr key={i} onClick={()=>openModal(d.id)} >
+            return <tr key={i} onClick={() => openModal(d.id)} >
                 <td style={{backgroundColor: d.color}}>{d.id}</td>
                 <td style={{backgroundColor: d.color}}>{d.name}</td>
                 <td style={{backgroundColor: d.color}}>{d.year}</td>
@@ -82,48 +89,61 @@ return (
              
             </tbody>
         </table>
-        <Pagination 
+        <Pagination className='pagination'
              currentPage={currentPage}
              itemsPerPage={pagePostsLimit}
              onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
              totalItems={12}
-             pageNeighbours={2}
+             pageNeighbours={0}
+            //  startLabel={""}
+            //  endLabel={""}
             />
-            <Modal
-            // details={product.find()}
+        <Modal
             isOpen={modalIsOpen}
             ariaHideApp={false}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        // style={customStyles}
-        contentLabel="Example Modal"
-      ><p>{currentProduct.name}</p></Modal>
+            // onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+            ><div>
+                <button onClick={closeModal}>X</button>
+                <table>
+                    <thead>
+                    <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Year</th>
+                    <th>Color</th>
+                    <th>Pantone value</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <tr>
+                        <td style={{backgroundColor: currentProduct.color}}>{currentProduct.id}</td>
+                        <td style={{backgroundColor: currentProduct.color}}>{currentProduct.name}</td>
+                        <td style={{backgroundColor: currentProduct.color}}>{currentProduct.year}</td>
+                        <td style={{backgroundColor: currentProduct.color}}>{currentProduct.color}</td>
+                        <td style={{backgroundColor: currentProduct.color}}>{currentProduct.pantone_value}</td>
+                        </tr>
+                    </tbody>
+                </table>
+        
+            </div>
+        </Modal>
     </div>
 </div>
 )
 }
 
-
-    /* {getProduct.map((d)=> { return <div key={d.id} style={{backgroundColor: d.color}}>
-  
-    <div className='app-container'>
-        <table>
-            <thead>
-                <tr>
-                <th>Id {d.name}</th>
-                <th>Name</th>
-                <th>Year</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>12</td>
-                <td>Ewa</td>
-                <td>2012</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-        </div>})} */
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
 export default Table;
