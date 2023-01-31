@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import { useNavigate, useSearchParams} from "react-router-dom";
 import { Pagination } from 'react-pagination-bar';
 import './Table.css';
 import 'react-pagination-bar/dist/index.css';
 import Modal from 'react-modal';
-// import Filter from './Filter';
 
 
 const Table = ({filterValue}) => {
@@ -14,12 +14,24 @@ const [filterProducts, setFilterProducts] = useState(-1)
 const [currentPage, setCurrentPage] = useState(1);
 const [modalIsOpen, setIsOpen] = useState(false);
 const [currentProduct, setCurrentProduct] = useState('') 
-const pagePostsLimit = 6;
+const pagePostsLimit = 5;
+const navigate = useNavigate();
+const [searchParams] = useSearchParams();
+
+useEffect(() => {
+    const pageFromURL= searchParams.get('page');
+    if(pageFromURL){
+        setCurrentPage(Number(pageFromURL))
+    } else { navigate({
+    pathname: '/',
+    search: `?page=1`,
+  });}
+    
+},[searchParams, navigate])
 
 useEffect(() => { 
-    const getProduct = () => { Axios.get (`https://reqres.in/api/products?page=${currentPage}`).then((response) => { 
+    const getProduct = () => { Axios.get (`https://reqres.in/api/products?page=${currentPage}&per_page=${pagePostsLimit}`).then((response) => { 
     setProduct(response.data.data)
-    console.log(response.data.data)
     
     })
     .catch((error) => {
@@ -44,24 +56,22 @@ const openModal = (id) => {
     setIsOpen(true);
     const testProduct = product.find((el) => el.id === id);
     setCurrentProduct(testProduct)
-    console.log(testProduct)
-    console.log(product)
 }
-// const afterOpenModal=() =>{
-    
-
-// };
 
 const closeModal = () =>{
     setIsOpen(false);
 }
 
-console.log(currentPage)
-// console.log(currentProduct)
-
 const visibleProducts = filterProducts !== -1 ? filterProducts : product
 
-
+const handlePageChange=(pageNumber) => {
+    console.log(pageNumber)
+    navigate({
+        pathname: '/',
+        search: `?page=${pageNumber}`,
+      });
+      setCurrentPage(pageNumber);
+}
 
 return (
 <div className="app-container">
@@ -76,8 +86,6 @@ return (
             </thead>
             <tbody>
             {visibleProducts.length > 0 && visibleProducts
-            // && visibleProducts.slice
-            //     ((currentPage - 1) * pagePostsLimit, currentPage * pagePostsLimit)
             .map((d, i)=>{
             return <tr key={i} onClick={() => openModal(d.id)} >
                 <td style={{backgroundColor: d.color}}>{d.id}</td>
@@ -92,16 +100,13 @@ return (
         <Pagination className='pagination'
              currentPage={currentPage}
              itemsPerPage={pagePostsLimit}
-             onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+             onPageChange={(pageNumber)=>handlePageChange(pageNumber)}
              totalItems={12}
              pageNeighbours={0}
-            //  startLabel={""}
-            //  endLabel={""}
             />
         <Modal
             isOpen={modalIsOpen}
             ariaHideApp={false}
-            // onAfterOpen={afterOpenModal}
             onRequestClose={closeModal}
             style={customStyles}
             contentLabel="Example Modal"
@@ -130,11 +135,11 @@ return (
         
             </div>
         </Modal>
-    </div>
+    </div>   
 </div>
+
 )
 }
-
 const customStyles = {
     content: {
       top: '50%',
