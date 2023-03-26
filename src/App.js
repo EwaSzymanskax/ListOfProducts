@@ -20,7 +20,7 @@ function App() {
       integrity="sha512-MY2jfK3DBnVzdS2V8MXo5lRtr0mNRroUI9hoLVv2/yL3vrJTam3VzASuKQ96fLEpyYIT4a8o7YgtUs5lPjiLVQ=="
       crossOrigin="anonymous"
       referrerPolicy="no-referrer"></script>
-      <div className='search'>Search:</div>
+      <div className='search'>Search by id:</div>
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
       <RouterProvider router={router} />
     </div>  
