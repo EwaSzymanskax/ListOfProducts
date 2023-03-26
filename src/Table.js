@@ -17,18 +17,18 @@ const [currentProduct, setCurrentProduct] = useState('')
 const pagePostsLimit = 5;
 const navigate = useNavigate();
 const [searchParams] = useSearchParams();
-console.log('TABLE')
-useEffect(() => {
-    const pageFromURL= searchParams.get('page');
-    if(pageFromURL){
-        setCurrentPage(Number(pageFromURL))
-    } else { navigate({
-    pathname: '/',
-    search: `?page=1`,
-  });}
-    console.log('pageFromURL')
-    console.log(pageFromURL)
-},[searchParams, navigate])
+console.log('T')
+// useEffect(() => {
+//     const pageFromURL= searchParams.get('page');
+//     if(pageFromURL){
+//         setCurrentPage(Number(pageFromURL))
+//     } else { navigate({
+//     pathname: '/',
+//     search: `?page=1`,
+//   });}
+//     console.log('pageFromURL')
+//     console.log(pageFromURL)
+// },[searchParams, navigate])
 
 useEffect(() => { 
     const getProduct = () => { Axios.get (`https://reqres.in/api/products?page=${currentPage}&per_page=${pagePostsLimit}`).then((response) => { 
