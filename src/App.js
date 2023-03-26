@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import Table from './Table';
 import './App.css';
-import { Route, HashRouter, Routes } from "react-router-dom";
+import {  RouterProvider, createHashRouter } from "react-router-dom";
 
 
 function App() {
   const [value, setValue] = useState("");
   
+  const router = createHashRouter([
+    {
+      path: "/",
+      element:<Table filterValue={value} />,
+    },
+  ]);
+
   return (
     <div className='card'>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/react-modal/3.14.3/react-modal.min.js"
@@ -15,9 +22,7 @@ function App() {
       referrerPolicy="no-referrer"></script>
       <div className='search'>Search:</div>
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
-      <Routes>
-        <Route exact path='/' element={<Table filterValue={value} />}></Route>
-      </Routes>
+      <RouterProvider router={router} />
     </div>  
   )
 }
