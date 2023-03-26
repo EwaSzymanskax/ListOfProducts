@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Table from './Table';
 import './App.css';
-import { Route, HashRouter, Routes } from "react-router-dom";
+import { Route, HashRouter, Routes, BrowserRouter } from "react-router-dom";
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
       <HashRouter>
       <Routes>
-        <Route path='/' element={<Table filterValue={value} />}></Route>
+        <Route exact path='/' element={<Table filterValue={value} />}></Route>
       </Routes>
       </HashRouter> 
     </div>  
