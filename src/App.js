@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import Table from './Table';
 import './App.css';
-import { Route, HashRouter, Routes } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 
 
 function App() {
   const [value, setValue] = useState("");
+
+  const router = createHashRouter([
+    {
+      path: "/*",
+      element: <Table filterValue={value} />,
+    }
+  ]);
   
   return (
     <div className='card'>
@@ -15,11 +22,7 @@ function App() {
       referrerPolicy="no-referrer"></script>
       <div className='search'>Search:</div>
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
-      <HashRouter>
-      <Routes>
-        <Route path='/' element={<Table filterValue={value} />}></Route>
-      </Routes>
-      </HashRouter> 
+      <RouterProvider router={router}/>
     </div>  
   )
 }
