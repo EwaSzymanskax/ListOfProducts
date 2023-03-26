@@ -15,11 +15,9 @@ function App() {
       referrerPolicy="no-referrer"></script>
       <div className='search'>Search:</div>
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
-      <HashRouter basename='https://ewaszymanskax.github.io/ListOfProducts'>
       <Routes>
         <Route exact path='/' element={<Table filterValue={value} />}></Route>
       </Routes>
-      </HashRouter>
     </div>  
   )
 }
