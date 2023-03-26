@@ -24,7 +24,7 @@ function App() {
                 <Routes>
                     <Route
                         exact
-                        path="/"
+                        path="/ListOfProducts"
                         element={<Table filterValue={value} />}
                     ></Route>
                 </Routes>
