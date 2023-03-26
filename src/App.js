@@ -17,7 +17,7 @@ function App() {
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
       <BrowserRouter>
       <Routes>
-        <Route path='ListOfProducts/' element={<Table filterValue={value} />}></Route>
+        <Route path='/ListOfProducts/' element={<Table filterValue={value} />}></Route>
       </Routes>
       </BrowserRouter> 
     </div>  
