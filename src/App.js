@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Table from './Table';
 import './App.css';
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { Route, HashRouter, Routes } from "react-router-dom";
 
 
 function App() {
@@ -15,11 +15,11 @@ function App() {
       referrerPolicy="no-referrer"></script>
       <div className='search'>Search:</div>
       <input type="number" value={value} onChange={e => setValue(e.target.value)}></input>
-      <BrowserRouter>
+      <HashRouter>
       <Routes>
-        <Route path='/ListOfProducts/' element={<Table filterValue={value} />}></Route>
+        <Route path='/' element={<Table filterValue={value} />}></Route>
       </Routes>
-      </BrowserRouter> 
+      </HashRouter> 
     </div>  
   )
 }
