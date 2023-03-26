@@ -17,7 +17,7 @@ const [currentProduct, setCurrentProduct] = useState('')
 const pagePostsLimit = 5;
 const navigate = useNavigate();
 const [searchParams] = useSearchParams();
-
+console.log('TABLE')
 useEffect(() => {
     const pageFromURL= searchParams.get('page');
     if(pageFromURL){
@@ -26,7 +26,8 @@ useEffect(() => {
     pathname: '/',
     search: `?page=1`,
   });}
-    
+    console.log('pageFromURL')
+    console.log(pageFromURL)
 },[searchParams, navigate])
 
 useEffect(() => { 
